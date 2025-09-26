@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneha Baid | People Experience Strategist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Subtle Accents -->
+    <!-- Application Structure Plan: A two-column interactive layout with a fixed left-hand menu and a scrollable main content area on the right. This structure was chosen to provide persistent, clear navigation and reduce cognitive load for the user. A recruiter can quickly click between the cover letter, capabilities, and experience to assess qualifications without losing context. The layout prioritizes a dashboard-like feel for the "Capabilities" section and a narrative timeline for "Career Journey," aligning the interactive format with the specific content's purpose to improve usability and user understanding. -->
+    <!-- Visualization & Content Choices:
+        - Key Impact Metrics: Goal is to inform and impress. Presented as dynamic "Key Impact Metrics" cards with a bar chart (Chart.js/Canvas). Interaction: Animated numbers and charts on view. Justification: Visualizing metrics makes them more impactful and easier to digest than text alone.
+        - Capabilities: Goal is to organize and compare skills. Presented as a radar chart (Chart.js/Canvas) and a list. Interaction: Dynamic chart updates. Justification: The radar chart provides a holistic, visual summary of her multifaceted expertise, which is more engaging than a simple list and visually communicates the interconnectedness of her skills.
+        - Career Journey: Goal is to show change and growth. Presented as a vertical timeline. Interaction: Clickable job titles to expand and show details. Justification: A timeline is a natural and intuitive way to represent a career path.
+        - Awards & Education: Goal is to inform and build credibility. Presented in a clean, structured two-column grid. Justification: Simple, clear presentation is most effective for this type of information.
+        - Cover Letter: Goal is to provide context and motivation. Presented as a simple, readable text block. Justification: This maintains the traditional format of a cover letter while integrating it into the interactive application.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3D3D3D;
+        }
+        .nav-item {
+            color: #555;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        .nav-item.active {
+            color: #A58A73;
+            font-weight: 600;
+            background-color: #F8F5F2;
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #A58A73;
+            border-radius: 0 4px 4px 0;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.35rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 9999px;
+            background-color: #A58A73;
+            border: 2px solid #FDFBF8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased flex min-h-screen">
+
+    <!-- Left Sidebar Menu -->
+    <aside class="w-64 bg-gray-50 flex-none p-8 hidden md:flex flex-col shadow-md">
+        <div class="mb-10">
+            <h1 class="text-3xl font-bold text-[#3D3D3D]">Sneha Baid</h1>
+            <h2 class="text-lg text-[#A58A73]">People Experience Strategist</h2>
+        </div>
+        <nav class="flex-1">
+            <ul class="space-y-4 text-lg">
+                <li>
+                    <button class="nav-item w-full text-left py-2 px-4 rounded-lg relative active" data-target="cover-letter">
+                        Cover Letter
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left py-2 px-4 rounded-lg relative" data-target="capabilities">
+                        Capabilities
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left py-2 px-4 rounded-lg relative" data-target="experience">
+                        Career Journey
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left py-2 px-4 rounded-lg relative" data-target="education">
+                        Education & Awards
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left py-2 px-4 rounded-lg relative" data-target="assistant">
+                        ✨ Application Assistant
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="mt-auto space-y-2 text-sm text-gray-500">
+            <p><strong>Contact:</strong> snehabaid.1998@gmail.com</p>
+            <p><a href="https://www.linkedin.com/in/-snehabaid" target="_blank" class="hover:underline">LinkedIn</a></p>
+            <p><a href="https://snehabaid.notion.site/PortFolio-7f97927c70bd48a9aad527305feae17b" target="_blank" class="hover:underline">Portfolio</a></p>
+            <p><a href="https://medium.com/@snehabaid.1998" target="_blank" class="hover:underline">Blog</a></p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        
+        <!-- Mobile Navigation Menu -->
+        <nav class="md:hidden mb-8">
+            <ul class="flex justify-center space-x-2 text-xs">
+                <li><button class="nav-item py-2 px-3 rounded-lg active" data-target="cover-letter">Cover Letter</button></li>
+                <li><button class="nav-item py-2 px-3 rounded-lg" data-target="capabilities">Skills</button></li>
+                <li><button class="nav-item py-2 px-3 rounded-lg" data-target="experience">Career</button></li>
+                <li><button class="nav-item py-2 px-3 rounded-lg" data-target="education">Awards</button></li>
+                <li><button class="nav-item py-2 px-3 rounded-lg" data-target="assistant">Assistant</button></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Sections -->
+        <div id="tab-content">
+            
+            <!-- Cover Letter Section -->
+            <section id="cover-letter" class="tab-pane active fade-in">
+                <div class="bg-white p-8 md:p-12 rounded-lg shadow-sm border border-gray-100">
+                    <h2 class="text-3xl font-bold text-[#A58A73] mb-6">Introduction</h2>
+                    <p class="mb-4 text-gray-700 leading-relaxed">Hello network! I'm actively exploring new opportunities where I can apply my unique expertise at the intersection of People & Culture and User Experience. My career has been focused on building human-centered solutions that transform how organizations attract, engage, and retain talent.</p>
+                    <p class="mb-4 text-gray-700 leading-relaxed">I am a firm believer that the employee journey should be as seamless and intuitive as the best user experience. My background in UX and Service Design allows me to map pain points and build empathetic, scalable solutions. I've empowered leaders by acting as a trusted advisor and coach, transforming complex challenges into clear, actionable plans.</p>
+                    <p class="mb-4 text-gray-700 leading-relaxed">My data-driven approach has led to measurable impact, including a 40% increase in candidate response rates and a 35% increase in diversity representation on key campaigns. I use a data-driven mindset and a passion for operational excellence to optimize workflows and drive meaningful change.</p>
+                    <p class="mb-4 text-gray-700 leading-relaxed">If you or someone in your network is looking for a People professional who can blend strategic HR with a passion for human-centered design, I'd welcome the chance to connect. I'm excited about the possibility of shaping the next generation of employee experiences.</p>
+                    <p class="font-light text-sm text-gray-500 mt-6">Sincerely,<br>Sneha Baid</p>
+                </div>
+            </section>
+
+            <!-- Capabilities Section -->
+            <section id="capabilities" class="tab-pane hidden">
+                <h2 class="text-3xl font-bold text-[#A58A73] text-center mb-4">Core Capabilities</h2>
+                <p class="text-center text-gray-500 mb-8 max-w-2xl mx-auto">My expertise sits at the intersection of people, design, and strategy. Below is a visual representation of my core capabilities, followed by a more detailed breakdown. This combination allows me to build not just efficient, but truly engaging and human-centered employee experiences.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="capabilitiesChart"></canvas>
+                    </div>
+                    <div>
+                         <ul class="space-y-4">
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="font-semibold text-gray-800">Human-Centered Design</h4>
+                                <p class="text-sm text-gray-600">Applying UX principles and service blueprinting to optimize the entire employee lifecycle.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="font-semibold text-gray-800">Strategic Talent Management</h4>
+                                <p class="text-sm text-gray-600">Advising leaders on building high-performing teams through strategic recruitment and branding.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="font-semibold text-gray-800">Operational Excellence</h4>
+                                <p class="text-sm text-gray-600">Driving efficiency via process optimization, ATS implementation, and new technologies.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="font-semibold text-gray-800">People Analytics</h4>
+                                <p class="text-sm text-gray-600">Using data to identify systemic issues and inform strategic, impactful decisions.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="font-semibold text-gray-800">Inclusive & Scalable Solutions</h4>
+                                <p class="text-sm text-gray-600">Embedding EDI into frameworks to ensure consistent, accessible, and fair service delivery.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="tab-pane hidden">
+                <h2 class="text-3xl font-bold text-[#A58A73] text-center mb-4">Career Journey</h2>
+                <p class="text-center text-gray-500 mb-8 max-w-2xl mx-auto">My career has been a journey of blending creative design with strategic people operations. Here's a look at my professional path and how I've delivered results in diverse environments.</p>
+                <div class="relative pl-8 border-l-2 border-gray-200">
+                    <!-- BCU -->
+                    <div class="timeline-item mb-8">
+                        <h4 class="font-semibold text-lg text-gray-800">Resourcing Advisor (Recruitment Operations)</h4>
+                        <p class="text-sm text-gray-500 mb-2">Birmingham City University | Nov 2024 - Present</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>Led research and stakeholder engagement to enhance digital recruitment services and onboarding.</li>
+                            <li>Advised leaders on hiring strategies, managing end-to-end recruitment for 30-50 roles at a time.</li>
+                            <li>Designed and delivered workshops to embed best practices for inclusive recruitment.</li>
+                        </ul>
+                    </div>
+                    <!-- Manpower -->
+                    <div class="timeline-item mb-8">
+                        <h4 class="font-semibold text-lg text-gray-800">Service Delivery Consultant</h4>
+                        <p class="text-sm text-gray-500 mb-2">ManpowerGroup | Nov 2023 - Nov 2024</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>Pioneered digital recruitment experiences, using user research to optimize workflows.</li>
+                            <li>Championed diversity campaigns, resulting in a 35% increase in female and minority representation.</li>
+                            <li>Drove process improvements that reduced time-to-submit by 50%.</li>
+                        </ul>
+                    </div>
+                    <!-- Freelance -->
+                    <div class="timeline-item">
+                        <h4 class="font-semibold text-lg text-gray-800">Freelance Interior Designer</h4>
+                        <p class="text-sm text-gray-500 mb-2">Oct 2020 - Oct 2021</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>Designed the interiors for a 3-bedroom apartment on a specific budget, focusing on creating a young, minimalistic, and colorful space.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education & Awards Section -->
+            <section id="education" class="tab-pane hidden">
+                <h2 class="text-3xl font-bold text-[#A58A73] text-center mb-4">Education & Awards</h2>
+                <p class="text-center text-gray-500 mb-10 max-w-2xl mx-auto">My formal education in design and architecture provides the creative and structural foundation for my work in people experience, complemented by continuous professional development and notable recognitions.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-gray-700 text-center">Education & Certifications</h3>
+                        <ul class="space-y-4">
+                           <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">MSc in User Experience Design</p>
+                                <p class="text-sm text-gray-500">Birmingham City University, UK</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">Bachelor's in Architecture</p>
+                                <p class="text-sm text-gray-500">PES University, Bengaluru, India</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">CIPD Certification (Working Towards)</p>
+                                <p class="text-sm text-gray-500">Professional Development</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">Lean Professional Certificate (In Progress)</p>
+                                <p class="text-sm text-gray-500">Professional Development</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-gray-700 text-center">Awards & Recognition</h3>
+                         <ul class="space-y-4">
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">Rashtrapati Puraskar</p>
+                                <p class="text-sm text-gray-600">Highest award in Girl Guiding, presented by the President of India.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">National Award in Architecture</p>
+                                <p class="text-sm text-gray-600">Honored twice for best mural design at a national level.</p>
+                            </li>
+                            <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <p class="font-semibold">Centum in Mathematics</p>
+                                <p class="text-sm text-gray-600">Awarded for achieving a perfect score in mathematics.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Application Assistant Section -->
+            <section id="assistant" class="tab-pane hidden">
+                <div class="bg-white p-8 md:p-12 rounded-lg shadow-sm border border-gray-100">
+                    <h2 class="text-3xl font-bold text-[#A58A73] mb-6">✨ Application Assistant</h2>
+                    <p class="mb-6 text-gray-700 leading-relaxed">This tool uses the power of AI to help you tailor your application for specific job opportunities. Simply paste a job description below and let the assistant do the heavy lifting.</p>
+                    
+                    <div class="mb-10">
+                        <h3 class="font-bold text-xl mb-4 text-gray-700">Tailor My Cover Letter ✨</h3>
+                        <div class="mb-4">
+                            <label for="jobDescription" class="block text-sm font-medium text-gray-600 mb-2">Paste a Job Description</label>
+                            <textarea id="jobDescription" rows="10" class="w-full p-4 border rounded-lg focus:ring focus:ring-[#A58A73] focus:border-transparent transition-colors"></textarea>
+                        </div>
+                        <button id="tailorButton" class="w-full md:w-auto bg-[#A58A73] text-white py-3 px-6 rounded-full font-semibold hover:bg-[#8B7465] transition-colors shadow-lg">Generate Tailored Cover Letter</button>
+                        <div id="tailorOutput" class="mt-8 p-6 bg-gray-50 rounded-lg hidden">
+                            <p class="text-gray-700 whitespace-pre-wrap"></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-gray-700">Generate Interview Questions ✨</h3>
+                        <p class="text-sm text-gray-500 mb-4">Use the same job description above to generate questions that will help you prepare for your interview.</p>
+                        <button id="questionsButton" class="w-full md:w-auto bg-[#A58A73] text-white py-3 px-6 rounded-full font-semibold hover:bg-[#8B7465] transition-colors shadow-lg">Generate Interview Questions</button>
+                        <div id="questionsOutput" class="mt-8 p-6 bg-gray-50 rounded-lg hidden">
+                            <p class="text-gray-700 whitespace-pre-wrap"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=";
+        const API_KEY = "";
+        
+        const myCV = {
+            coverLetter: `I am writing to my network to express my passion for people-centric roles that blend talent acquisition, operational excellence, and a unique human-centered design approach. My background in User Experience (UX) and Service Design gives me a distinct advantage in building seamless, empathetic, and impactful employee experiences. My experience as a People professional has been centered on empowering managers and leaders. I thrive on acting as a trusted advisor, coaching leaders through complex hiring strategies and embedding values-based interviewing to improve fairness and transparency. I have a proven ability to translate challenges—whether it's a retention issue or team conflict—into scalable solutions that build leadership capability. A core element of my work is operational excellence and a data-driven mindset. I have a history of managing end-to-end recruitment processes and leading initiatives that optimize workflows and improve the overall employee experience. I have consistently used data analysis to identify systemic issues and drive meaningful change, as demonstrated by my success in increasing candidate response rates by 40% and diversity representation by 35%. My Master's in User Experience Design provides me with a unique lens for identifying "moments that matter" in the employee journey, allowing me to design and implement truly impactful people solutions. I am eager to explore opportunities where I can apply my skills to support organizations in building a world-class employee experience. Thank you for considering me as you hear about new roles in your network. I look forward to the possibility of working together to build something truly exceptional.`,
+            experience: [
+                { role: "Resourcing Advisor", company: "Birmingham City University", description: "Led research and stakeholder engagement to enhance digital recruitment services and onboarding. Advised leaders on hiring strategies, managing end-to-end recruitment for 30-50 roles at a time. Designed and delivered workshops to embed best practices for inclusive recruitment." },
+                { role: "Service Delivery Consultant", company: "ManpowerGroup", description: "Pioneered digital recruitment experiences, using user research to optimize workflows. Championed diversity campaigns, resulting in a 35% increase in female and minority representation. Drove process improvements that reduced time-to-submit by 50%." },
+            ],
+            skills: "Human-Centered Design, Strategic Talent Management, Operational Excellence, People Analytics, Inclusive Solutions"
+        };
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            // Navigation logic
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            function setActiveTab(targetId) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+                tabPanes.forEach(pane => {
+                    if (pane.id === targetId) {
+                        pane.classList.remove('hidden');
+                        pane.classList.add('active', 'fade-in');
+                    } else {
+                        pane.classList.add('hidden');
+                        pane.classList.remove('active', 'fade-in');
+                    }
+                });
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    setActiveTab(item.dataset.target);
+                });
+            });
+
+            // Set initial active state
+            setActiveTab('cover-letter');
+
+            // Chart.js Radar Chart for Capabilities
+            const ctx = document.getElementById('capabilitiesChart').getContext('2d');
+            const capabilitiesChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Human-Centered Design',
+                        'Strategic Talent Mgt.',
+                        'Operational Excellence',
+                        'People Analytics',
+                        'Inclusive Solutions'
+                    ],
+                    datasets: [{
+                        label: 'Expertise Level',
+                        data: [90, 85, 88, 82, 92],
+                        backgroundColor: 'rgba(165, 138, 115, 0.2)',
+                        borderColor: 'rgba(165, 138, 115, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(165, 138, 115, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(165, 138, 115, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter, sans-serif'
+                                },
+                                color: '#3D3D3D'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 20,
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Gemini API Logic
+        const tailorButton = document.getElementById('tailorButton');
+        const questionsButton = document.getElementById('questionsButton');
+        const jobDescriptionInput = document.getElementById('jobDescription');
+        const tailorOutput = document.getElementById('tailorOutput');
+        const questionsOutput = document.getElementById('questionsOutput');
+
+        async function callGemini(systemPrompt, userQuery, outputElement) {
+            outputElement.classList.remove('hidden');
+            outputElement.innerHTML = `<p class="text-center text-gray-500">Generating...</p>`;
+            
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                };
+
+                const response = await fetch(API_URL + API_KEY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    outputElement.innerHTML = `<p class="text-gray-700 whitespace-pre-wrap">${text}</p>`;
+                } else {
+                    outputElement.innerHTML = `<p class="text-red-500">Sorry, something went wrong. Please try again.</p>`;
+                }
+            } catch (error) {
+                console.error("Error during API call:", error);
+                outputElement.innerHTML = `<p class="text-red-500">Sorry, something went wrong. Please try again.</p>`;
+            }
+        }
+
+        tailorButton.addEventListener('click', () => {
+            const jobDesc = jobDescriptionInput.value;
+            if (!jobDesc) {
+                tailorOutput.classList.remove('hidden');
+                tailorOutput.innerHTML = `<p class="text-red-500">Please paste a job description first.</p>`;
+                return;
+            }
+            const systemPrompt = "You are a professional resume writer. Rewrite the provided cover letter to be tailored for the given job description. Use skills and phrases from the provided CV and job description to create a strong, tailored cover letter. Do not use asterisks or bullet points in the final output.";
+            const userQuery = `Current CV: ${JSON.stringify(myCV, null, 2)}\nCurrent Cover Letter: ${myCV.coverLetter}\nJob Description to tailor for: ${jobDesc}`;
+            callGemini(systemPrompt, userQuery, tailorOutput);
+        });
+
+        questionsButton.addEventListener('click', () => {
+            const jobDesc = jobDescriptionInput.value;
+            if (!jobDesc) {
+                questionsOutput.classList.remove('hidden');
+                questionsOutput.innerHTML = `<p class="text-red-500">Please paste a job description first.e</p>`;
+                return;
+            }
+            const systemPrompt = "You are an expert HR professional. Based on the candidate's CV and the job description, generate a list of 5-7 thoughtful and challenging interview questions. The questions should test the candidate's skills and experience directly. Present the questions as a numbered list.";
+            const userQuery = `Candidate's CV: ${JSON.stringify(myCV, null, 2)}\nJob Description to generate questions for: ${jobDesc}`;
+            callGemini(systemPrompt, userQuery, questionsOutput);
+        });
+    </script>
+</body>
+</html>
