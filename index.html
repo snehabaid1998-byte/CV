@@ -112,10 +112,17 @@
                         Education & Awards
                     </button>
                 </li>
+                <!-- NEW ADDITION: Printable CV link -->
+                <li>
+                    <a href="Sneha Baid.CV.pdf" target="_blank" class="nav-item w-full text-left py-2 px-4 rounded-lg relative hover:bg-[#F8F5F2] block">
+                        Printable Resume (PDF)
+                    </a>
+                </li>
             </ul>
         </nav>
         <div class="mt-auto space-y-2 text-sm text-gray-500">
             <p><strong>Contact:</strong> snehabaid.1998@gmail.com</p>
+            <p><a href="Sneha Baid.CV.pdf" target="_blank" class="hover:underline">Download Printable CV (PDF)</a></p>
             <p><a href="https://www.linkedin.com/in/-snehabaid" target="_blank" class="hover:underline">LinkedIn</a></p>
             <p><a href="https://snehabaid.notion.site/PortFolio-7f97927c70bd48a9aad527305feae17b" target="_blank" class="hover:underline">Portfolio</a></p>
             <p><a href="https://medium.com/@snehabaid.1998" target="_blank" class="hover:underline">Blog</a></p>
@@ -132,6 +139,7 @@
                 <li><button class="nav-item py-2 px-3 rounded-lg" data-target="capabilities">Skills</button></li>
                 <li><button class="nav-item py-2 px-3 rounded-lg" data-target="experience">Career</button></li>
                 <li><button class="nav-item py-2 px-3 rounded-lg" data-target="education">Awards</button></li>
+                <li><a href="Sneha Baid.CV.pdf" target="_blank" class="nav-item py-2 px-3 rounded-lg hover:bg-gray-100">PDF</a></li>
             </ul>
         </nav>
 
@@ -279,7 +287,11 @@
                 navItems.forEach(item => {
                     item.classList.remove('active');
                 });
-                document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+                // Check if the target is a button before trying to add 'active' class
+                const targetElement = document.querySelector(`[data-target="${targetId}"]`);
+                if (targetElement && targetElement.tagName === 'BUTTON') {
+                    targetElement.classList.add('active');
+                }
 
                 tabPanes.forEach(pane => {
                     if (pane.id === targetId) {
@@ -294,7 +306,10 @@
 
             navItems.forEach(item => {
                 item.addEventListener('click', () => {
-                    setActiveTab(item.dataset.target);
+                    // Only process click event for buttons (interactive tabs)
+                    if (item.tagName === 'BUTTON') {
+                        setActiveTab(item.dataset.target);
+                    }
                 });
             });
 
